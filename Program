@@ -1,0 +1,470 @@
+from tkinter import *
+import os
+from tkinter import messagebox
+ 
+# Designing window for registration
+ 
+def register():
+    global register_screen
+    register_screen = Toplevel(main_screen)
+    register_screen.title("Register")
+    register_screen.geometry("400x400")
+ 
+    global username
+    global password
+    global username_entry
+    global password_entry
+    global dateOfBirth
+    global address
+    global phoneNumber
+    global pc
+    username = StringVar()
+    password = StringVar()
+    dateOfBirth= StringVar()
+    address=StringVar()
+    phoneNumber=StringVar()
+    pc=StringVar()
+ 
+    Label(register_screen, text="Please enter details below",font=("Calibri bold",20) ).pack()
+    Label(register_screen, text="").pack()
+    username_lable = Label(register_screen, text="Username * ")
+    username_lable.pack()
+    username_entry = Entry(register_screen, textvariable=username)
+    username_entry.pack()
+    dateOfBirth_lable = Label(register_screen, text="Date Of Birth * ")
+    dateOfBirth_lable.pack()
+    dateOfBirth_entry = Entry(register_screen, textvariable=dateOfBirth)
+    dateOfBirth_entry.pack()
+    address_lable = Label(register_screen, text="Address * ")
+    address_lable.pack()
+    address_entry = Entry(register_screen, textvariable=address)
+    address_entry.pack()
+    phoneNumber_lable = Label(register_screen, text="Phone Number * ")
+    phoneNumber_lable.pack()
+    phoneNumber_entry = Entry(register_screen, textvariable=phoneNumber)
+    phoneNumber_entry.pack()
+    password_lable = Label(register_screen, text="Password * ")
+    password_lable.pack()
+    password_entry = Entry(register_screen, textvariable=password, show='*')
+    password_entry.pack()
+    pc_lable = Label(register_screen, text="Confirm Password * ")
+    pc_lable.pack()
+    pc_entry = Entry(register_screen, textvariable=pc, show='*')
+    pc_entry.pack()
+    Label(register_screen, text="").pack()
+    Button(register_screen, text="Register", width=10, height=1, bg="cadet blue", command = register_user).pack()
+ 
+ 
+# Designing window for login 
+ 
+def login():
+    global login_screen
+    login_screen = Toplevel(main_screen)
+    login_screen.title("Login")
+    login_screen.geometry("300x250")
+    Label(login_screen, text="Please enter details below to login").pack()
+    Label(login_screen, text="").pack()
+ 
+    global username_verify
+    global password_verify
+ 
+    username_verify = StringVar()
+    password_verify = StringVar()
+ 
+    global username_login_entry
+    global password_login_entry
+ 
+    Label(login_screen, text="Username * ").pack()
+    username_login_entry = Entry(login_screen, textvariable=username_verify)
+    username_login_entry.pack()
+    Label(login_screen, text="").pack()
+    
+    Label(login_screen, text="Password * ").pack()
+    password_login_entry = Entry(login_screen, textvariable=password_verify, show= '*')
+    password_login_entry.pack()
+    Label(login_screen, text="").pack()
+    Button(login_screen, text="Login", width=10, height=1, command = login_verify).pack()
+ 
+# Implementing event on register button
+ 
+def register_user():
+ 
+    username_info = username.get()
+    password_info = password.get()
+    dateOfBirth_info = dateOfBirth.get()
+    address_info = address.get()
+    phoneNumber_info = phoneNumber.get()
+ 
+    file = open(username_info, "w")
+    file.write(username_info + "\n")
+    file.write(password_info+"\n")
+    file.write(dateOfBirth_info+"\n")
+    file.write(address_info+"\n")
+    file.write(phoneNumber_info)
+    file.close()
+ 
+    Label(register_screen, text="Registration Success", fg="green", font=("calibri", 11)).pack()
+    login()
+    
+ 
+# Implementing event on login button 
+ 
+def login_verify():
+    username1 = username_verify.get()
+    password1 = password_verify.get()
+    username_login_entry.delete(0, END)
+    password_login_entry.delete(0, END)
+ 
+    list_of_files = os.listdir()
+    if username1 in list_of_files:
+        file1 = open(username1, "r")
+        verify = file1.read().splitlines()
+        if password1 in verify:
+            login_screen.destroy()
+            main_screen.destroy()
+            login_sucess()
+ 
+        else:
+            password_not_recognised()
+ 
+    else:
+        user_not_found()
+ 
+# Designing popup for login invalid password
+ 
+def password_not_recognised():
+    global password_not_recog_screen
+    password_not_recog_screen = Toplevel(login_screen)
+    password_not_recog_screen.title("Success")
+    password_not_recog_screen.geometry("150x100")
+    Label(password_not_recog_screen, text="Invalid Password ").pack()
+    Button(password_not_recog_screen, text="OK", command=delete_password_not_recognised).pack()
+ 
+# Designing popup for user not found
+ 
+def user_not_found():
+    
+    global user_not_found_screen
+    user_not_found_screen = Toplevel(login_screen)
+    user_not_found_screen.title("Success")
+    user_not_found_screen.geometry("150x100")
+    Label(user_not_found_screen, text="User Not Found").pack()
+    Button(user_not_found_screen, text="OK", command=delete_user_not_found_screen).pack()
+ 
+# Deleting popups
+ 
+
+    
+ 
+def delete_password_not_recognised():
+    password_not_recog_screen.destroy()
+ 
+ 
+def delete_user_not_found_screen():
+    user_not_found_screen.destroy()
+ 
+ 
+# Designing Main(first) window
+ 
+def main_account_screen():
+    global main_screen
+    main_screen = Tk()
+    main_screen.geometry("300x250")
+    main_screen.title("Account Login")
+    Label(text="Select Your Choice", bg="cadet blue", width="300", height="2", font=("Calibri Bold", 25)).pack()
+    Label(text="").pack()
+    Button(text="Login", height="2", width="30", command = login).pack()
+    Label(text="").pack()
+    Button(text="Register", height="2", width="30", command=register).pack()
+ 
+    main_screen.mainloop()
+
+def login_sucess():
+
+    root=Tk()
+    root.geometry("650x350")
+    root.config(bg="cadet blue")
+    root.title("Cricket match details")
+
+    label=Label(root,text="         Cricket Management System         ",font="Calibri 40 bold",fg='Black',bg="grey88")
+    label.pack()
+
+    filename = "cricketMatches.txt"
+    myfile = open(filename, "a+")
+    myfile.close
+    fileResults = "cricketResults.txt"
+    resFile = open(fileResults, "a+")
+    resFile.close
+
+    def show_details(self):
+        show=Toplevel(root)
+        show.geometry("700x350")
+        show.title("Schedule")
+        label=Label(show,text="Upcoming Events",font="Calibri 40 bold",fg='Black')
+        label.pack()
+
+        myfile = open(filename, "r+")
+        filecontents = myfile.read()
+        if len(filecontents) == 0:
+            text_schedule=Label(show,text="* There is no match scheduled *")
+            text_schedule.pack()
+        else:
+            text_schedule=Label(show,text=filecontents,font="Calibri 13")
+            text_schedule.pack()
+        myfile.close
+
+    def submit_data():
+        number=numbervalue.get()
+        team1=firstTeam_value.get()
+        team2=secondTeam_value.get()
+        date=datevalue.get()
+        location=locationvalue.get()
+
+        if number== "" or team1=="" or team2=="" or date=="" or location=="":
+            notif.config(fg='red',text="All fields required *")
+            return
+        
+        searchNumber = 'Match Number : ' + number
+        myfile = open(filename, "r+")
+        filecontents = myfile.readlines()
+        found = False
+        for line in filecontents:
+            if searchNumber in line:
+                notif.config(fg='red',text='* This Schedule Already present *')
+                print("Match ID is already taken. Choose again")
+                found = True
+                break
+        if found==False:
+            matchDetails = (
+                        "Match Number : " + number + " , Team 1 : " + team1 + " , Team 2 : " + team2 + " , Date : " + date + " , Location : "+ location +"\n")
+            myfile = open(filename, "a")
+            myfile.write(matchDetails)
+            print("The following match " + team1 + " vs " + team2+ " has been scheduled !")
+        done = Label(top,text='The Match has been scheduled',font="Calibri 15 bold",fg="black")
+        done.place(x=15,y=300)
+        
+        
+    def schedule_match(self):
+        global numbervalue
+        global firstTeam_value
+        global secondTeam_value
+        global datevalue
+        global locationvalue
+        global notif
+        global top
+        top=Toplevel(root)
+        top.geometry("400x350")
+        top.title("Match Scheduling")
+        label=Label(top,text="Match Schedule",font="Calibri 40 bold",fg='Black')
+        label.pack()
+
+        matchNumber =Label(top,text='Match  Number:')
+        matchNumber.place(x=15,y=90)
+        numbervalue=StringVar()
+        numberentry=Entry(top,textvariable=numbervalue,width='30')
+        numberentry.place(x=120,y=90)
+
+        firstTeam = Label(top,text='First Team')
+        secondTeam = Label(top,text='Second Team')
+        
+        firstTeam.place(x=15,y=120)
+        secondTeam.place(x=15,y=150)
+        
+
+        firstTeam_value=StringVar()
+        secondTeam_value=StringVar()
+
+        firstentry=Entry(top,textvariable=firstTeam_value,width='30')
+        secondentry=Entry(top,textvariable=secondTeam_value,width='30')
+
+        firstentry.place(x=120,y=120)
+        secondentry.place(x=120,y=150)
+
+        date = Label(top,text='Date')
+        date.place(x=15,y=180)
+        location=Label(top,text='Location')
+        location.place(x=15,y=210)
+
+        datevalue=StringVar()
+        locationvalue=StringVar()
+
+        dateentry=Entry(top,textvariable=datevalue,width='30')
+        locationentry=Entry(top,textvariable=locationvalue,width='30')
+
+        dateentry.place(x=120,y=180)
+        locationentry.place(x=120,y=210)
+
+        
+        b1=Button(top,text='submit',command=submit_data,width='30')
+        b1.place(x=40,y=250)
+
+        notif=Label(top,font='Calibri 16 bold')
+        notif.place(x=15,y=300)
+
+    def copy_result():
+        num=numvalue.get()
+        score1=score1value.get()
+        score2=score2value.get()
+        manOfMatch=manOfMatchvalue.get()
+
+        if num== "" or score1=="" or score2=="" or manOfMatch=="":
+            notif1.config(fg='red',text="All fields required *")
+            return
+
+        searchNumber = 'Match Number : ' + num
+        myfile = open(filename, "r")
+        filecontents = myfile.readlines()
+        resFile = open(fileResults, "r+")
+        resultContents = resFile.readlines()
+        check=False
+        for line in resultContents:
+            if searchNumber in line:
+                notif1.config(fg='red',text='* This Result Already present *')
+                print("Match results for this mathch ahave been added. Choose again")
+                check = True
+                break
+        if check==False:
+            found = False
+            for line in filecontents:
+                if searchNumber in line:
+                    matchDetails = (
+                                ", Team 1 Score: " + score1 + " , Team 2 Score: " + score2 + " ,Man of the Match:" + manOfMatch + "")
+                    finalDetails = str(line).strip("\n") + matchDetails + "\n"
+                    resFile = open(fileResults, "a")
+                    resFile.write(finalDetails)
+                    resFile.close()
+                    found = True
+                    break
+            if found == False:
+                notif1.config(fg='red',text="* The Match wasn't scheduled *")
+                print("The Match wasn't scheduled")
+        done = Label(top1,text='The Match details have been updated',font="Calibri 15 bold",fg="black")
+        done.place(x=15,y=300)
+
+    def update(self):
+        global numvalue
+        global score1value
+        global score2value
+        global manOfMatchvalue
+        global notif1
+        global top1
+        top1=Toplevel(root)
+        top1.geometry("400x350")
+        top1.title("Match Result")
+        label=Label(top1,text="Match Result",font="Calibri 40 bold",fg='Black')
+        label.pack()
+
+        matchNumber =Label(top1,text='Match  Number:')
+        matchNumber.place(x=15,y=90)
+        numvalue=StringVar()
+        numberentry=Entry(top1,textvariable=numvalue,width='30')
+        numberentry.place(x=120,y=90)
+
+        score1 = Label(top1,text="Team1 Score")
+        score2 = Label(top1,text="Team2 score")
+        manOfMatch = Label(top1,text="Man of the Match")
+        score1.place(x=15,y=120)
+        score2.place(x=15,y=150)
+        manOfMatch.place(x=15,y=180)
+
+        score1value=StringVar()
+        score2value=StringVar()
+        manOfMatchvalue=StringVar()
+        score1entry=Entry(top1,textvariable=score1value,width='30')
+        score2entry=Entry(top1,textvariable=score2value,width='30')
+        manOfMatch_entry=Entry(top1,textvariable=manOfMatchvalue,width='30')
+
+        score1entry.place(x=120,y=120)
+        score2entry.place(x=120,y=150)
+        manOfMatch_entry.place(x=120,y=180)
+
+        b2=Button(top1,text='submit',command=copy_result,width='30')
+        b2.place(x=40,y=230)
+
+        notif1=Label(top1,font='Calibri 16 bold')
+        notif1.place(x=15,y=300)
+
+    def search():
+        number=value.get()
+
+        if number == "":
+            messagebox.showwarning("Warning","All fields are required")
+            return
+        
+        searchNumber = 'Match Number : ' + number
+        myfile = open(filename, "r+")
+        filecontents = myfile.readlines()
+        resFile = open(fileResults, "r+")
+        resultContents = resFile.readlines()
+
+        found = False
+        for line in resultContents:
+            if searchNumber in line:
+                text_schedule=Label(top2,text=line,font="Calibri 10 bold")
+                text_schedule.place(x=5,y=250)
+                found = True
+                break
+        if found == False:
+            for line in filecontents:
+                if searchNumber in line:
+                    text_schedule=Label(top2,text=line,font="Calibri 10 bold")
+                    text_schedule.place(x=5,y=250)
+                    found = True
+                    break
+        if found == False:
+            text_schedule=Label(top2,text="* Match wasn't Scheduled *",font="Calibri 20 bold",fg="red")
+            text_schedule.place(x=15,y=250)
+
+    def search_result(self):
+        global value
+        global notif2
+        global top2
+        top2=Toplevel(root)
+        top2.geometry("950x300")
+        top2.title("Search Result")
+        label=Label(top2,text="Search Result",font="Calibri 40 bold",fg='Black')
+        label.pack()
+
+        match_num=Label(top2,text="Match Number")
+        match_num.place(x=15,y=90)
+        value=StringVar()
+        matchEntry=Entry(top2,textvariable=value,width='30')
+        matchEntry.place(x=120,y=90)
+
+        b3=Button(top2,text='Submit',command=search,width='20')
+        b3.place(x=30,y=150)
+
+        notif2=Label(top2,font='Calibri 16 bold')
+        notif2.place(x=15,y=200)
+
+    f1=Frame(root,borderwidth=2,bg="Black")
+    f1.pack(side=TOP,anchor='n',padx=2,pady=2)
+
+    f2=Frame(root,borderwidth=2,bg="Black")
+    f2.pack(side=TOP,anchor='n',padx=2,pady=2)
+
+    f3=Frame(root,borderwidth=2,bg="Black")
+    f3.pack(side=TOP,anchor='n',padx=2,pady=2)
+
+    f4=Frame(root,borderwidth=2,bg="Black")
+    f4.pack(side=TOP,anchor='n',padx=2,pady=2)
+
+    b1=Button(f1,text='Show upcoming matches',font="Calibri 20 bold",fg='Black')
+    b1.pack()
+    b1.bind('<Button-1>',show_details)
+
+    b2=Button(f2,text='Schedule a Match',font="Calibri 20 bold",fg='Black')
+    b2.pack()
+    b2.bind('<Button-1>',schedule_match)
+
+    b3=Button(f3,text='Add Match Results',font="Calibri 20 bold",fg='Black')
+    b3.pack()
+    b3.bind('<Button-1>',update)
+
+    b4=Button(f4,text='Display Match details',font="Calibri 20 bold",fg='Black')
+    b4.pack()
+    b4.bind('<Button-1>',search_result)
+
+    root.mainloop()
+ 
+main_account_screen()
